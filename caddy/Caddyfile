@@ -1,0 +1,16 @@
+customer1.localhost {
+  reverse_proxy react-customer1:3000
+}
+
+customer2.localhost {
+  reverse_proxy react-customer2:3001
+}
+
+/api/* {
+  reverse_proxy backend:5000
+}
+
+/etc/hosts {
+  127.0.0.1 customer1.localhost
+  127.0.0.1 customer2.localhost
+}

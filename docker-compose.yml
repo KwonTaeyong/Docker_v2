@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  caddy:
+    image: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - backend
+      - react-customer1
+      - react-customer2
+    networks:
+      - frontend
+      - backend
+
+  react-customer1:
+    build: ./react-customer1
+    expose:
+      - "80"
+    networks:
+      - frontend
+
+  react-customer2:
+    build: ./react-customer2
+    expose:
+      - "3000"
+    networks:
+      - frontend
+
+  backend:
+    build: ./backend
+    expose:
+      - "5000"
+    networks:
+      - backend
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+
+volumes:
+  pgdata:
+
+networks:
+  frontend:
+  backend:
